@@ -1,6 +1,6 @@
+import { nanoid } from "nanoid"
 import { useContext, useState, useRef, useEffect } from "react"
 import { PoemsContext } from "../PoemsContext"
-import { nanoid } from "nanoid"
 
 
 export default function PoetryInputs() {
@@ -37,10 +37,10 @@ export default function PoetryInputs() {
         e.preventDefault()
         if(poemStatus === "new") {
             const newPoem = {
-                id: nanoid(), 
+                id: nanoid(),
                 lines: [
                     {
-                        id: nanoid(), 
+                        id: nanoid(),
                         location: location,
                         firstLine: poemInputs.firstLine, 
                         secondLine: poemInputs.secondLine,
@@ -51,11 +51,12 @@ export default function PoetryInputs() {
             }
             createNewPoem(newPoem)
         } else {
+            console.log("updating poem")
             const updatedPoem = {
                 ...lastPoem,
                 lines: [
                     ...lastPoem.lines, 
-                    {id: nanoid(), location: location, ...poemInputs, }
+                    {id: nanoid(), location: location, ...poemInputs}
                 ],
                 isFinished: poemStatus === "finish" ? true : false
             }

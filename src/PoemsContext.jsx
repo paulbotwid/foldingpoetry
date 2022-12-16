@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import useLocation from "./hooks/useLocation"
+import Axios from "axios"
 
 const PoemsContext = React.createContext()
 
@@ -11,21 +12,26 @@ function PoemsContextProvider({children}) {
 
     // get history from localstorage and get location
     useEffect(()=> {
-        if(localStorage.getItem("poems").length > 0) {
-            const pastPoems = JSON.parse(localStorage.getItem("poems"))
-            setAllPoems(pastPoems)
-            console.log("got poems from localStorage")
-        }
+        // if(localStorage.getItem("poems").length > 0) {
+        //     const pastPoems = JSON.parse(localStorage.getItem("poems"))
+        //     setAllPoems(pastPoems)
+        //     console.log("got poems from localStorage")
+        // }
+
+        Axios.get("http://localhost:3000/getPoems").then((response)=>{
+            setAllPoems(response.data)
+        })
+
     }, [])
 
     // update localstorage
-    useEffect(()=>{
-        if(allPoems.length > 0) {
-            const newPoems = JSON.stringify(allPoems)
-            localStorage.setItem("poems", newPoems)
-            console.log("updated localstorage")
-        }
-    }, [allPoems])
+    // useEffect(()=>{
+    //     if(allPoems.length > 0) {
+    //         const newPoems = JSON.stringify(allPoems)
+    //         localStorage.setItem("poems", newPoems)
+    //         console.log("updated localstorage")
+    //     }
+    // }, [allPoems])
 
 
     // set location state
@@ -36,21 +42,20 @@ function PoemsContextProvider({children}) {
 
     function createNewPoem(poemObj) {
         console.log("creating new poem")
-        setAllPoems(prevPoems => (
-            [...prevPoems, poemObj]
-        ))
+        Axios.post("http://localhost:3000/createPoem", poemObj).then((response)=>{
+            console.log("Created new poem on db, id: " + poemObj.id)
+            setAllPoems(prevPoems => (
+                [...prevPoems, poemObj]
+            ))
+        })
     }
 
     function updatePoem(updatedPoem) {
-        console.log("updating poem " + updatedPoem.id)
-        setAllPoems(prevPoems => {
-           return prevPoems.map(poem => {
-                if(poem.id === updatedPoem.id) {
-                    return updatedPoem
-                } else {
-                    return poem
-                }
-           })
+        Axios.put("http://localhost:3000/updatePoem", updatedPoem).then((response)=>{
+            console.log("updating poem " + updatedPoem._id)
+            setAllPoems(prevPoems => {
+                return prevPoems.map(poem => poem._id === updatedPoem._id ? updatedPoem : poem)
+            })
         })
     }
     

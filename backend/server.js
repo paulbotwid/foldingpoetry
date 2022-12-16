@@ -37,6 +37,21 @@ app.post("/createPoem", async (req, res)=>{
     res.json(poem)
 })
 
+app.put("/updatePoem", async (req, res)=>{
+    const id = req.body.id
+    console.log("updating id: " + id)
+    try {
+        await poemModel.findOne({id: id}, (err, foundPoem)=>{
+            foundPoem.lines = req.body.lines
+            foundPoem.isFinished = req.body.isFinished
+            foundPoem.save()
+            res.send("updated poem")
+        })
+    } catch(err) {
+        console.log("error: " + err)
+    }
+})
+
 
 app.listen(
     port, ()=>{

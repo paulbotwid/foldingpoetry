@@ -10,11 +10,11 @@ export default function ShowPoems() {
         poems = allPoems.slice().reverse()
         poems = poems.map(poem => poem.isFinished && (
             <div 
-            key={poem.id}
+            key={poem.id ? poem.id : poem._id}
             className="poem mb-4 border-b py-8"
             >
                 {poem.lines.map(line => (
-                    <span className="poem-lines" key={line.id} data-location={line.location}>
+                    <span className="poem-lines" key={line.id ? line.id : line._id} data-location={line.location}>
                         <span className="poem-line first-line"> {line.firstLine}</span>
                         {line.secondLine && <span className="poem-line second-line">{line.secondLine}</span>}
                     </span>
