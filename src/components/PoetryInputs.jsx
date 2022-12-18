@@ -35,40 +35,59 @@ export default function PoetryInputs() {
 
     function submitPoem(e) {
         e.preventDefault()
-        if(poemStatus === "new") {
-            const newPoem = {
-                id: nanoid(),
-                lines: [
-                    {
-                        id: nanoid(),
-                        location: location,
-                        firstLine: poemInputs.firstLine, 
-                        secondLine: poemInputs.secondLine,
-                    }
-                ],
-                isFinished: false,
-                targetLines: getRandomNr(3,4)
+        const isValid = validateInputs()
+        if(isValid) {
+            if(poemStatus === "new") {
+                const newPoem = {
+                    id: nanoid(),
+                    lines: [
+                        {
+                            id: nanoid(),
+                            location: location,
+                            firstLine: poemInputs.firstLine, 
+                            secondLine: poemInputs.secondLine,
+                        }
+                    ],
+                    isFinished: false,
+                    targetLines: getRandomNr(3,4)
+                }
+                createNewPoem(newPoem)
+            } else {
+                console.log("updating poem")
+                const updatedPoem = {
+                    ...lastPoem,
+                    lines: [
+                        ...lastPoem.lines, 
+                        {id: nanoid(), location: location, ...poemInputs}
+                    ],
+                    isFinished: poemStatus === "finish" ? true : false
+                }
+                updatePoem(updatedPoem)
+                updatedPoem.isFinished && console.log("Finished the poem!")
             }
-            createNewPoem(newPoem)
-        } else {
-            console.log("updating poem")
-            const updatedPoem = {
-                ...lastPoem,
-                lines: [
-                    ...lastPoem.lines, 
-                    {id: nanoid(), location: location, ...poemInputs}
-                ],
-                isFinished: poemStatus === "finish" ? true : false
-            }
-            updatePoem(updatedPoem)
-            updatedPoem.isFinished && console.log("Finished the poem!")
+            resetInputs()
         }
-        resetInputs()
     }
 
     function resetInputs() {
         setPoemInputs({firstLine: "", secondLine: ""})
         firstLineRef.current.focus()
+    }
+
+    function validateInputs() {
+        const firstLine = poemInputs.firstLine.trim()
+        const secondLine = poemInputs.secondLine.trim()
+
+        if(firstLine === "" || (secondLine === "" && poemStatus !== "finish" )) {
+            if(firstLine.length > 0  && secondLine === "") {
+                secondLineRef.current.focus()
+            } else if(firstLine === "" && secondLine.length > 0) {
+                firstLineRef.current.focus()
+            }
+            return false
+        } else {
+            return true
+        }
     }
 
     function getTitle() {

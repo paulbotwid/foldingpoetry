@@ -12,26 +12,16 @@ function PoemsContextProvider({children}) {
 
     // get history from localstorage and get location
     useEffect(()=> {
-        // if(localStorage.getItem("poems").length > 0) {
-        //     const pastPoems = JSON.parse(localStorage.getItem("poems"))
-        //     setAllPoems(pastPoems)
-        //     console.log("got poems from localStorage")
-        // }
-
+        console.log("Getting poems")
         Axios.get("http://localhost:3000/getPoems").then((response)=>{
             setAllPoems(response.data)
+        }).catch(error=>{
+            console.log(error)
+        }).finally(()=>{
+            console.log("Loaded poems successfully")
         })
-
     }, [])
 
-    // update localstorage
-    // useEffect(()=>{
-    //     if(allPoems.length > 0) {
-    //         const newPoems = JSON.stringify(allPoems)
-    //         localStorage.setItem("poems", newPoems)
-    //         console.log("updated localstorage")
-    //     }
-    // }, [allPoems])
 
 
     // set location state
@@ -58,6 +48,13 @@ function PoemsContextProvider({children}) {
             })
         })
     }
+
+    function deletePoem(id) {
+        Axios.delete(`http://localhost:3000/deletePoem/${id}`)
+        setAllPoems(prevPoems => {
+            return prevPoems.filter(poem => poem.id !== id)
+        })
+    }
     
     console.log("allPoems:")
     console.log(allPoems)
@@ -68,7 +65,8 @@ function PoemsContextProvider({children}) {
             allPoems,
             createNewPoem,
             updatePoem, 
-            location
+            location,
+            deletePoem
         }}>
             {children}
         </PoemsContext.Provider>

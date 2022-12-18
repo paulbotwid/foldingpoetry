@@ -11,18 +11,19 @@ function App() {
 
   return (
     <div className="App">
-      <PoetryInputs />
-      <hr></hr>
-      <ShowPoems />
-
-      <button className='fixed bottom-4 right-4' onClick={clearLocalstorage}>Clear localStorage</button>
-      
-      <h4>Att göra</h4>
-      <ul className='list-disc'>
-          <li>Thank you screen</li>
-          <li>Email notification</li>
-          <li>Database support</li>
-      </ul>
+      <div className="container">
+        <PoetryInputs />
+        <hr></hr>
+        <ShowPoems />
+        
+        <h4>Att göra</h4>
+        <ul className='list-disc mb-8'>
+            <li>Thank you screen</li>
+            <li>Email notification</li>
+            <li>Validate form (don't allow empty fields)</li>
+            <li className='line-through'>Database support</li>
+        </ul>
+      </div>
     </div>
   )
 }
