@@ -94,6 +94,10 @@ button:hover {
 .poem {
   width: 35rem;
   max-width: 100%;
+  color: #222;
+  &:hover {
+    color: #222;
+  }
   position: relative;
   cursor: pointer;
 }

@@ -1,7 +1,6 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const userModel = require('./models/users')
 const poemModel = require('./models/poems')
 
 const dotenv = require('dotenv').config() 
@@ -27,6 +26,17 @@ connection.once('open', ()=>{
 
 app.get("/getPoems", (req, res)=>{
     poemModel.find({},(error, result)=> {
+        if(error) {
+            res.json(error)
+        } else {
+            res.json(result)
+        }
+    })
+})
+
+app.get("/getSingle/:id", (req, res)=>{
+    const id = req.params.id
+    poemModel.findOne({id:id},(error, result)=> {
         if(error) {
             res.json(error)
         } else {

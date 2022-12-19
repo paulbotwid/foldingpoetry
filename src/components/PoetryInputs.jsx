@@ -101,7 +101,7 @@ export default function PoetryInputs() {
     }
 
     return (
-        <div className={`mt-20 mb-8 ${poemStatus === "new" && "new-poem"}`}>
+        <div className={`mt-20 mb-40 ${poemStatus === "new" && "new-poem"}`}>
             {getTitle()}
             <form action="">
                 <div className="poetry-inputs flex flex-wrap">
@@ -129,7 +129,7 @@ export default function PoetryInputs() {
                         />
                     </span>}
                 </div>
-                <button className="mt-4" onClick={submitPoem}>Submit</button>
+                <button className="mt-8" onClick={submitPoem}>Submit</button>
             </form>
         </div>
     )
