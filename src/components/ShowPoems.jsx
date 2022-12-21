@@ -16,7 +16,7 @@ export default function ShowPoems() {
     }
 
     return (
-        <div className="poem-list my-10">
+        <div className="poem-list hide-before-data-load my-10">
             <h4 className="text-gray-500">Past poems</h4>
             {poems.length > 0 && poems}
         </div>

@@ -68,6 +68,15 @@ button:hover {
 }
 
 // inputs 
+.hide-before-data-load {
+  opacity: 0;
+  transition: opacity 1s;
+}
+.poems-loaded {
+  .hide-before-data-load {
+    opacity: 1;
+  }
+}
 .poetry-inputs {
 
 }
@@ -85,6 +94,8 @@ button:hover {
 .last-line {
   @apply border-none min-w-0;
 }
+
+
 
 
 // poem display

@@ -8,17 +8,37 @@ function PoemsContextProvider({children}) {
 
     const [allPoems, setAllPoems] = useState([])
     const [location, setLocation] = useState("")
+    // an array of the poem ids that the user has contributed to
+    const [contributions, setContributions] = useState([])
+    const [poemsLoaded, setPoemsLoaded] = useState(false)
     const locationData = useLocation()
+
+    // Look for past contributions 
+    useEffect(()=>{
+        if(localStorage.getItem("contributions")) {
+            console.log("found past contributions:")
+            console.log(localStorage.getItem("contributions"))
+            setContributions(JSON.parse(localStorage.getItem("contributions")))
+        } 
+    }, [])
+
+    // Update localstorage together with contributions state
+    useEffect(()=>{
+        localStorage.setItem("contributions", JSON.stringify(contributions))
+    }, [contributions])
 
     // get history from localstorage and get location
     useEffect(()=> {
         console.log("Getting poems")
         Axios.get("http://localhost:3000/getPoems").then((response)=>{
             setAllPoems(response.data)
+            console.log("allPoems:")
+            console.log(response.data)
         }).catch(error=>{
             console.log(error)
         }).finally(()=>{
             console.log("Loaded poems successfully")
+            setPoemsLoaded(true)
         })
     }, [])
 
@@ -42,11 +62,13 @@ function PoemsContextProvider({children}) {
 
     function updatePoem(updatedPoem) {
         Axios.put("http://localhost:3000/updatePoem", updatedPoem).then((response)=>{
-            console.log("updating poem " + updatedPoem._id)
             setAllPoems(prevPoems => {
-                return prevPoems.map(poem => poem._id === updatedPoem._id ? updatedPoem : poem)
+                return prevPoems.map(poem => poem.id === updatedPoem.id ? updatedPoem : poem)
             })
         })
+        setContributions(prevContributions => (
+            prevContributions.some(pastId => pastId === updatedPoem.id) ? prevContributions : [...prevContributions, updatedPoem.id]
+        ))
     }
 
     function deletePoem(id) {
@@ -55,10 +77,7 @@ function PoemsContextProvider({children}) {
             return prevPoems.filter(poem => poem.id !== id)
         })
     }
-    
-    console.log("allPoems:")
-    console.log(allPoems)
-    console.log("location: " + location)
+
 
     return (
         <PoemsContext.Provider value={{
@@ -66,7 +85,9 @@ function PoemsContextProvider({children}) {
             createNewPoem,
             updatePoem, 
             location,
-            deletePoem
+            deletePoem,
+            contributions,
+            poemsLoaded
         }}>
             {children}
         </PoemsContext.Provider>

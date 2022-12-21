@@ -5,7 +5,14 @@ import { PoemsContext } from "../PoemsContext"
 
 export default function PoetryInputs() {
 
-    const {allPoems, createNewPoem, updatePoem, location} = useContext(PoemsContext)
+    const {
+        allPoems, 
+        createNewPoem, 
+        updatePoem, 
+        location, 
+        contributions,
+        poemsLoaded
+    } = useContext(PoemsContext)
     const [poemStatus, setPoemStatus] = useState("new")
     const [poemInputs, setPoemInputs] = useState({firstLine: "", secondLine: ""})
     const [lastPoem, setLastPoem] = useState(null)
@@ -13,20 +20,27 @@ export default function PoetryInputs() {
     const firstLineRef = useRef()
     const secondLineRef = useRef()
 
-    // look for a poem that is not finished
+
+    // Look for a poem that is not finished
     useEffect(()=>{
-        const unFinishedPoem = allPoems.find(poem => poem.isFinished === false)
-        if(unFinishedPoem !== undefined) { 
-            console.log("found unfinished poem")
-            setLastPoem(unFinishedPoem)
-            // if poem is at target lines, set status to finish
-            unFinishedPoem.lines.length === unFinishedPoem.targetLines ? setPoemStatus("finish") : setPoemStatus("continue")
-            resetInputs()
-        } else if(unFinishedPoem === undefined) {
-            console.log("no unfinished found, starting new poem")
-            setPoemStatus("new")
+        if(poemsLoaded) {
+            console.log("Poems loaded, looking for unfinished poem")
+            const unFinishedPoems = allPoems.filter(poem => {
+                return  !contributions.some(contId => contId === poem.id) && poem.isFinished === false
+            })
+            if(unFinishedPoems.length > 0) { 
+                console.log("found " + unFinishedPoems.length + " unfinished poems without contribution, continuing 1st")
+                const workingPoem = unFinishedPoems[0]
+                setLastPoem(workingPoem)
+                // if poem is at target lines, set status to finish, else continue
+                workingPoem.lines.length === workingPoem.targetLines ? setPoemStatus("finish") : setPoemStatus("continue")
+                resetInputs()
+            } else if(unFinishedPoems.length === 0) {
+                console.log("no unfinished without contribution, starting new poem")
+                setPoemStatus("new")
+            }
         }
-    }, [allPoems])
+    }, [poemsLoaded, contributions])
 
     function handleChange(event) {
         const {name, value} = event.target
@@ -37,9 +51,11 @@ export default function PoetryInputs() {
         e.preventDefault()
         const isValid = validateInputs()
         if(isValid) {
+            let contributionId = 0;
             if(poemStatus === "new") {
+                contributionId = nanoid()
                 const newPoem = {
-                    id: nanoid(),
+                    id: contributionId,
                     lines: [
                         {
                             id: nanoid(),
@@ -53,7 +69,7 @@ export default function PoetryInputs() {
                 }
                 createNewPoem(newPoem)
             } else {
-                console.log("updating poem")
+                contributionId = lastPoem.id
                 const updatedPoem = {
                     ...lastPoem,
                     lines: [
@@ -101,7 +117,7 @@ export default function PoetryInputs() {
     }
 
     return (
-        <div className={`mt-20 mb-40 ${poemStatus === "new" && "new-poem"}`}>
+        <div className={`poetry-input-wrapper hide-before-data-load mt-20 mb-40 ${poemStatus === "new" && "new-poem"}`}>
             {getTitle()}
             <form action="">
                 <div className="poetry-inputs flex flex-wrap">
