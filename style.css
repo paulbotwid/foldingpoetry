@@ -46,10 +46,23 @@ h1 {
   line-height: 1.1;
 }
 
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
 h4 {
   font-weight: 500;
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
+}
+
+p {
+  width: 35rem;
+}
+
+input {
+  @apply border border-gray-900 text-lg px-3 py-2 rounded-md;
 }
 
 button {
@@ -77,7 +90,9 @@ button:hover {
 }
 
 .poetry-input {
-  @apply border-b border-gray-300 my-3 text-3xl py-1 focus:border-gray-700 outline-none lg:min-w-[22rem];
+  border: none;
+  border-bottom: 1px solid;
+  @apply border-b border-gray-300 rounded-none px-0 my-3 text-3xl py-1 focus:border-gray-700 outline-none lg:min-w-[22rem];
 }
 .poetry-input:focus::-moz-placeholder {
   color: transparent;

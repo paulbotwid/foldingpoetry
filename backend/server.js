@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const poemModel = require('./models/poems')
+const sendEmail = require('./utils/sendEmail')
 
 const dotenv = require('dotenv').config() 
 
@@ -9,6 +10,7 @@ const app = express()
 const port = process.env.PORT || 3000
 const mongo_uri = process.env.ATLAS_URI
 
+// Middleware
 app.use(cors())
 app.use(express.json())
 
@@ -75,6 +77,20 @@ app.delete("/deletePoem/:id", async (req, res)=>{
     res.send("deleted")
 })
 
+app.post("/api/sendemail", async (req, res) => {
+    const {email} = req.body
+    try {
+        const send_to = email
+        const subject = "Test email"
+        const message = '<h2>Hello Paul</h2><p>This is a test email from folding poetry</p>'
+
+        await sendEmail(subject, message, send_to)
+        res.status(200).json({sucess: true, message: "Email sent"})
+    } catch(error) {
+        res.status(500).send(error)
+        console.log("error in endpoint call")
+    }
+})
 
 app.listen(
     port, ()=>{

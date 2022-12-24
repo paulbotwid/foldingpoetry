@@ -1,11 +1,16 @@
+import { useContext } from "react"
 import PoetryInputs from "../components/PoetryInputs"
 import ShowPoems from "../components/ShowPoems"
+import ThankYou from "../components/ThankYou"
+import { PoemsContext } from "../PoemsContext"
 
 export default function Home(){
+
+    const {didContribute} = useContext(PoemsContext)
+
     return (
         <>
-        <PoetryInputs />
-        <hr></hr>
+        { didContribute ? <ThankYou/> : <PoetryInputs /> }
         <ShowPoems />
         <h4>Att göra</h4>
         <ul className='list-disc mb-8'>

@@ -151,8 +151,6 @@ export default function PoetryInputs() {
     )
 }
 
-
-
 function getRandomNr(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
 }
