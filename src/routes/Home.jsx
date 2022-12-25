@@ -10,8 +10,14 @@ export default function Home(){
 
     return (
         <>
-        { didContribute ? <ThankYou/> : <PoetryInputs /> }
+        { 
+        didContribute.status ? 
+        <ThankYou/> : 
+        <>
+        <PoetryInputs />
         <ShowPoems />
+        </> 
+        }
         <h4>Att göra</h4>
         <ul className='list-disc mb-8'>
             <li>Thank you screen</li>

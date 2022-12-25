@@ -3,6 +3,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const poemModel = require('./models/poems')
 const sendEmail = require('./utils/sendEmail')
+const emailGroupModel = require('./models/emailGroup')
 
 const dotenv = require('dotenv').config() 
 
@@ -75,6 +76,27 @@ app.delete("/deletePoem/:id", async (req, res)=>{
     console.log("deleting id: " + id)
     await poemModel.findOneAndDelete({id: id}).exec()
     res.send("deleted")
+})
+
+app.put("/addEmailToGroup", async (req, res)=>{
+    const {email, id} = req.body
+    const filter = { poemId: id }
+    const update = {$addToSet: {emails: email}}
+    const options = {upsert: true, new: true}
+    console.log("adding email " + email + " to poem: " + id)
+    try {
+        emailGroupModel.findOneAndUpdate(filter, update, options, (err, foundGroup)=>{
+            if(err) {
+                console.log("error in mongoose update")
+                res.status(500).send(err)
+            } else {
+                res.status(200).send("added email to group")
+                console.log(foundGroup)
+            }
+        })
+    } catch(err) {
+        console.log("app.put Error: " + err)
+    }
 })
 
 app.post("/api/sendemail", async (req, res) => {

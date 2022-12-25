@@ -11,7 +11,7 @@ function PoemsContextProvider({children}) {
     // an array of the poem ids that the user has contributed to
     const [contributions, setContributions] = useState([])
     const [poemsLoaded, setPoemsLoaded] = useState(false)
-    const [didContribute, setDidContribute] = useState(false)
+    const [didContribute, setDidContribute] = useState({status: false, poemId: ""})
     const locationData = useLocation()
 
     // Look for past contributions 
@@ -82,7 +82,7 @@ function PoemsContextProvider({children}) {
         setContributions(prevContributions => (
             prevContributions.some(pastId => pastId === contId) ? prevContributions : [...prevContributions, contId]
         ))
-        setDidContribute(true)
+        setDidContribute({status: true, poemId: contId})
     }
 
 
