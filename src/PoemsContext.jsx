@@ -68,6 +68,12 @@ function PoemsContextProvider({children}) {
                 return prevPoems.map(poem => poem.id === updatedPoem.id ? updatedPoem : poem)
             })
         })
+        if(updatedPoem.isFinished) {
+            Axios.get(`http://localhost:3000/api/sendemail/${updatedPoem.id}`).then((response)=>{
+               console.log("Axios: sent emails. Response:")
+               console.log(response)
+            })
+        }
         addContribution(updatedPoem.id)
     }
 

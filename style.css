@@ -122,9 +122,10 @@ button:hover {
 }
 
 .poem {
-  width: 35rem;
+  width: 40rem;
   max-width: 100%;
   color: #222;
+  @apply border-b;
   position: relative;
   cursor: pointer;
 }
@@ -161,11 +162,14 @@ button:hover {
   opacity: 0.5;
 }
 
-.poem-lines:first-child .first-line {
-  display: block;
+.poem .poem-lines .ti-cursor {
+  display: none;
 }
 
-.poem-lines:not(:first-child) .second-line:before {
-  content: "\a";
-  white-space: pre;
+.poem-lines:last-child .ti-cursor {
+  display: inline-block;
+}
+
+.single-poem .poem {
+  border: none;
 }

@@ -8,7 +8,7 @@ export default function SinglePoem() {
 
     return (
         <div className="single-poem mt-20 text-2xl leading-10">
-            <Poem poem={poem} />
+            <Poem isSingle={true} poem={poem} />
         </div>
     )
 }

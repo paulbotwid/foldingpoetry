@@ -48,6 +48,31 @@ app.get("/getSingle/:id", (req, res)=>{
     })
 })
 
+app.get("/api/sendemail/:id", async (req, res) => {
+    const id = req.params.id
+    console.log("poem id from params: " + id)
+    try {
+        emailGroupModel.findOne({poemId: id}, (err, entry) => {
+            if(err) {
+                console.log(err)
+            } else { // no error
+                if(!entry) { // only  continue if an email group was found
+                    res.status(200).json({success: false, message: "No email group found for this id"})    
+                    return
+                }
+                const subject = "Your poem is finished!"
+                const message = `<h2>Hello Paul</h2><p>Just letting you know that the poem you contributed to is now finished, you can read it </p><a href="http://localhost:5173/poems/${id}">here</a>.`
+                const send_to = entry.emails
+                sendEmail(subject, message, send_to)
+                res.status(200).json({sucecss: true, message: "Email sent"})
+            }
+        })
+    } catch(err) {
+        res.status(500).send(err)
+        console.log("error in endpoint call")
+    }
+})
+
 app.post("/createPoem", async (req, res)=>{
     const poem = req.body
     const newPoem = new poemModel(poem)
@@ -99,20 +124,7 @@ app.put("/addEmailToGroup", async (req, res)=>{
     }
 })
 
-app.post("/api/sendemail", async (req, res) => {
-    const {email} = req.body
-    try {
-        const send_to = email
-        const subject = "Test email"
-        const message = '<h2>Hello Paul</h2><p>This is a test email from folding poetry</p>'
 
-        await sendEmail(subject, message, send_to)
-        res.status(200).json({sucess: true, message: "Email sent"})
-    } catch(error) {
-        res.status(500).send(error)
-        console.log("error in endpoint call")
-    }
-})
 
 app.listen(
     port, ()=>{

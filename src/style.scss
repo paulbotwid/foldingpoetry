@@ -123,9 +123,10 @@ button:hover {
   position: relative;
 }
 .poem {
-  width: 35rem;
+  width: 40rem;
   max-width: 100%;
   color: #222;
+  @apply border-b;
   &:hover {
     color: #222;
   }
@@ -158,13 +159,26 @@ button:hover {
 .poem:hover .poem-lines:not(:hover) {
   opacity: 0.5;
 }
-.poem-lines:first-child .first-line {
-  display: block;
+.poem .poem-lines .ti-cursor {
+  display: none;
 }
-.poem-lines:not(:first-child) .second-line:before {
-  content: "\a";
-  white-space: pre;
+.poem-lines:last-child {
+  .ti-cursor {
+    display: inline-block;
+  }
 }
-.poem-line {
-  // margin-right: 0.35em;
+// .poem-lines:first-of-type .first-line {
+//   display: block;
+// }
+// .poem-lines:not(:first-child) .second-line:before {
+//   content: "\a";
+//   white-space: pre;
+// }
+.poem-line.second-line {
+  // display: block;
+}
+
+// SINGLE POEM
+.single-poem .poem {
+  border: none;
 }

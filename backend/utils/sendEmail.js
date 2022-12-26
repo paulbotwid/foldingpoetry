@@ -16,7 +16,8 @@ const sendEmail = async (subject, message, send_to) => {
 
     const options = {
         from: process.env.EMAIL_USER,
-        to: send_to,
+        to: "All the poets",
+        bcc: send_to,
         subject: subject,
         html: message
     }
