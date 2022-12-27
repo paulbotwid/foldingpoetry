@@ -6,7 +6,7 @@ import { PoemsContext } from "../PoemsContext"
 export default function PoetryInputs() {
 
     const {
-        allPoems, 
+        unfinishedPoems, 
         createNewPoem, 
         updatePoem, 
         location, 
@@ -25,17 +25,13 @@ export default function PoetryInputs() {
     useEffect(()=>{
         if(poemsLoaded) {
             console.log("Poems loaded, looking for unfinished poem")
-            const unFinishedPoems = allPoems.filter(poem => {
-                return  !contributions.some(contId => contId === poem.id) && poem.isFinished === false
-            })
-            if(unFinishedPoems.length > 0) { 
-                console.log("found " + unFinishedPoems.length + " unfinished poems without contribution, continuing 1st")
-                const workingPoem = unFinishedPoems[0]
+            if(unfinishedPoems.length > 0) { 
+                const workingPoem = unfinishedPoems[0]
                 setLastPoem(workingPoem)
                 // if poem is at target lines, set status to finish, else continue
                 workingPoem.lines.length === workingPoem.targetLines ? setPoemStatus("finish") : setPoemStatus("continue")
                 resetInputs()
-            } else if(unFinishedPoems.length === 0) {
+            } else if(unfinishedPoems.length === 0) {
                 console.log("no unfinished without contribution, starting new poem")
                 setPoemStatus("new")
             }
@@ -117,7 +113,7 @@ export default function PoetryInputs() {
     }
 
     return (
-        <div className={`poetry-input-wrapper hide-before-data-load mt-20 mb-40 ${poemStatus === "new" && "new-poem"}`}>
+        <div className={`poetry-input-wrapper hide-when-loading ${!poemsLoaded && "loading"} mb-40 ${poemStatus === "new" && "new-poem"}`}>
             {getTitle()}
             <form action="">
                 <div className="poetry-inputs flex flex-wrap">

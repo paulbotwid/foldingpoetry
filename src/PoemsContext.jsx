@@ -6,12 +6,12 @@ const PoemsContext = React.createContext()
 
 function PoemsContextProvider({children}) {
 
-    const [allPoems, setAllPoems] = useState([])
+    const [unfinishedPoems, setUnfinishedPoems] = useState([])
     const [location, setLocation] = useState("")
     // an array of the poem ids that the user has contributed to
     const [contributions, setContributions] = useState([])
     const [poemsLoaded, setPoemsLoaded] = useState(false)
-    const [didContribute, setDidContribute] = useState({status: false, poemId: ""})
+    const [contributionStatus, setContributionStatus] = useState({status: false, poem: null})
     const locationData = useLocation()
 
     // Look for past contributions 
@@ -31,9 +31,9 @@ function PoemsContextProvider({children}) {
     // get history from localstorage and get location
     useEffect(()=> {
         console.log("Getting poems")
-        Axios.get("http://localhost:3000/getPoems").then((response)=>{
-            setAllPoems(response.data)
-            console.log("allPoems:")
+        Axios.get("http://localhost:3000/getUnfinishedPoems").then((response)=>{
+            setUnfinishedPoems(response.data)
+            console.log("unfinishedPoems:")
             console.log(response.data)
         }).catch(error=>{
             console.log(error)
@@ -55,18 +55,14 @@ function PoemsContextProvider({children}) {
         console.log("creating new poem")
         Axios.post("http://localhost:3000/createPoem", poemObj).then((response)=>{
             console.log("Created new poem on db, id: " + poemObj.id)
-            setAllPoems(prevPoems => (
-                [...prevPoems, poemObj]
-            ))
         })
-        addContribution(poemObj.id)
+        addContribution(poemObj)
     }
 
     function updatePoem(updatedPoem) {
         Axios.put("http://localhost:3000/updatePoem", updatedPoem).then((response)=>{
-            setAllPoems(prevPoems => {
-                return prevPoems.map(poem => poem.id === updatedPoem.id ? updatedPoem : poem)
-            })
+            console.log("updated poem succesfully: ")
+            console.log(response)
         })
         if(updatedPoem.isFinished) {
             Axios.get(`http://localhost:3000/api/sendemail/${updatedPoem.id}`).then((response)=>{
@@ -74,34 +70,33 @@ function PoemsContextProvider({children}) {
                console.log(response)
             })
         }
-        addContribution(updatedPoem.id)
+        addContribution(updatedPoem)
     }
 
     function deletePoem(id) {
-        Axios.delete(`http://localhost:3000/deletePoem/${id}`)
-        setAllPoems(prevPoems => {
-            return prevPoems.filter(poem => poem.id !== id)
+        Axios.delete(`http://localhost:3000/deletePoem/${id}`).then((res)=>{
+            console.log("deleted poem succesfully")
         })
     }
 
-    function addContribution(contId) {
+    function addContribution(poem) {
         setContributions(prevContributions => (
-            prevContributions.some(pastId => pastId === contId) ? prevContributions : [...prevContributions, contId]
+            prevContributions.some(pastId => pastId === poem.id) ? prevContributions : [...prevContributions, poem.id]
         ))
-        setDidContribute({status: true, poemId: contId})
+        setContributionStatus({status: true, poem: poem})
     }
 
 
     return (
         <PoemsContext.Provider value={{
-            allPoems,
+            unfinishedPoems,
             createNewPoem,
             updatePoem, 
             location,
             deletePoem,
             contributions,
             poemsLoaded,
-            didContribute
+            contributionStatus
         }}>
             {children}
         </PoemsContext.Provider>

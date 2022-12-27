@@ -2,32 +2,27 @@ import { useContext } from "react"
 import PoetryInputs from "../components/PoetryInputs"
 import ShowPoems from "../components/ShowPoems"
 import ThankYou from "../components/ThankYou"
+import getRandomPoem from "../hooks/getRandomPoem"
 import { PoemsContext } from "../PoemsContext"
 
 export default function Home(){
 
-    const {didContribute} = useContext(PoemsContext)
+    const {contributionStatus} = useContext(PoemsContext)
+    const randomPoem = getRandomPoem()
 
     return (
         <>
         { 
-        didContribute.status ? 
+        contributionStatus.status ? 
         <ThankYou/> : 
         <>
-        <PoetryInputs />
-        <ShowPoems />
-        </> 
+        <div className="start-page relative h-[80vh] flex flex-col justify-between">
+            <PoetryInputs />
+            <div className="long-arrow-down mb-10 relative w-[1px] left-4 bg-gray-400 text-gray-400 mt-auto h-24"></div>
+        </div>
+        {randomPoem}    
+        </>
         }
-        <h4>Att göra</h4>
-        <ul className='list-disc mb-8'>
-            <li>Finished poem reveal, type out line by line</li>
-            <li className="line-through">Thank you screen</li>
-            <li className="line-through">Email notification</li>
-            <li className="line-through">Prevent re-submit to same poem (save id to localhost)</li>
-            <li className="line-through">Routes and single poem view</li>
-            <li className='line-through'>Validate form (don't allow empty fields)</li>
-            <li className='line-through'>Database support</li>
-        </ul>
         </>
     )
 }

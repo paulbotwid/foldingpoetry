@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-  font-family: Georgia, Avenir, Helvetica, Arial, sans-serif;
+  --bright-green: rgb(0, 233, 47);
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -13,6 +14,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+.poem, .poetry-input {
+  font-family: "Georgia", serif;
+}
+
 .container {
   width: 1100px;
   max-width: 85%;
@@ -21,12 +26,17 @@
 
 body {
   color: #222;
+  background-color: #f8f8f8;
   font-size: 14px;
   @apply lg:text-lg;
 }
 
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
 a {
-  font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
 }
@@ -48,6 +58,7 @@ h1 {
 
 h2 {
   font-size: 1.7em;
+  font-weight: 500;
   margin-bottom: 0.5em;
 }
 
@@ -78,16 +89,14 @@ button {
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
-  @apply rounded-md;
+  @apply rounded-md bg-[var(--bright-green)] hover:bg-white transition;
 }
 
-button:hover {
-  background-color: #f1f1f1;
-}
-
-.hide-before-data-load {
-  opacity: 0;
+.hide-when-loading {
   transition: opacity 1s;
+}
+.hide-when-loading.loading {
+  opacity: 0;
 }
 
 .poems-loaded .hide-before-data-load {
@@ -97,7 +106,7 @@ button:hover {
 .poetry-input {
   border: none;
   border-bottom: 1px solid;
-  @apply border-b border-gray-300 rounded-none px-0 my-3 text-3xl py-1 focus:border-gray-700 outline-none lg:min-w-[22rem];
+  @apply border-b border-gray-300 bg-transparent rounded-none px-0 my-3 text-3xl py-1 focus:border-gray-700 outline-none lg:min-w-[22rem];
 }
 .poetry-input:focus::-moz-placeholder {
   color: transparent;
@@ -125,7 +134,6 @@ button:hover {
   width: 40rem;
   max-width: 100%;
   color: #222;
-  @apply border-b;
   position: relative;
   cursor: pointer;
 }
@@ -141,6 +149,10 @@ button:hover {
 .poem-lines:hover {
   color: blue;
   transition: all 0.1s;
+}
+
+.poem-line {
+  display: inline-block;
 }
 
 .poem-lines:after {
@@ -172,4 +184,18 @@ button:hover {
 
 .single-poem .poem {
   border: none;
+  @apply text-2xl leading-9;
+}
+
+.long-arrow-down:after {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -2px) rotate(45deg);
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-color: currentColor;
 }

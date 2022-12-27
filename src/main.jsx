@@ -4,8 +4,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { PoemsContextProvider } from './PoemsContext'
 import Root from './routes/Root'
 import Home from './routes/Home'
+import Archive from './routes/Archive'
 import ErrorPage from './errorPage'
-import SinglePoem from './routes/singlePoem'
+import Poem from './components/Poem'
 import Axios from 'axios'
 
 import './style.scss'
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/poems/:id",
-        element: <SinglePoem />,
+        element: <Poem isSingle={true} />,
         errorElement: <ErrorPage />,
         loader: async ({params}) => {
           return (
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
             })
           )
         }
+      },
+      {
+        path: "/archive",
+        element: <Archive />
       }
     ],
   },

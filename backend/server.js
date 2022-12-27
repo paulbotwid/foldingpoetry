@@ -27,13 +27,51 @@ connection.once('open', ()=>{
     console.log("db connection established")
 })
 
-app.get("/getPoems", (req, res)=>{
+app.get("/getAllPoems", (req, res)=>{
     poemModel.find({},(error, result)=> {
         if(error) {
             res.json(error)
         } else {
             res.json(result)
         }
+    })
+})
+
+app.get("/getUnfinishedPoems", (req, res)=>{
+    poemModel.find({isFinished: false},(error, result)=> {
+        if(error) {
+            res.json(error)
+        } else {
+            res.json(result)
+        }
+    })
+})
+
+app.get("/getFinishedPoems/:limit", (req, res)=>{
+    let limit = req.params.limit
+    poemModel.find({isFinished: true}).limit(limit).exec((error, result)=> {
+        if(error) {
+            res.json(error)
+        } else {
+            res.json(result)
+        }
+    })
+})
+
+// get random finished poem
+app.get("/getRandomFinishedPoem", (req, res)=>{
+    poemModel.countDocuments().exec(function (err, count) {
+        // Get a random entry
+        var random = Math.floor(Math.random() * count)
+      
+        // Again query all users but only fetch one offset by our random #
+        poemModel.findOne({isFinished: true}).skip(random).exec((err, result) => {
+            if(err) {
+                console.log(err)
+                return
+            }
+            res.json(result)
+        })
     })
 })
 
