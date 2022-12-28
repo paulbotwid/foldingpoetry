@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid"
 import { useContext, useState, useRef, useEffect } from "react"
 import { PoemsContext } from "../PoemsContext"
+import { useSearchParams } from "react-router-dom"
 
 
 export default function PoetryInputs() {
@@ -20,13 +21,17 @@ export default function PoetryInputs() {
     const firstLineRef = useRef()
     const secondLineRef = useRef()
 
+    const [passedPoemQuery, setPastPoemQuery] = useSearchParams()
+
 
     // Look for a poem that is not finished
     useEffect(()=>{
         if(poemsLoaded) {
-            console.log("Poems loaded, looking for unfinished poem")
-            if(unfinishedPoems.length > 0) { 
-                const workingPoem = unfinishedPoems[0]
+            console.log("Inputs looking for unfinished poem without contribution")
+            // find poem among unfished that is NOT among past contributions
+            const workingPoem = unfinishedPoems.find(poem => contributions.some(contId => contId === poem.id) === false)
+            if(unfinishedPoems.length > 0 && workingPoem) { 
+                console.log("Found unfinished poem without contribution, loading to inputs")
                 setLastPoem(workingPoem)
                 // if poem is at target lines, set status to finish, else continue
                 workingPoem.lines.length === workingPoem.targetLines ? setPoemStatus("finish") : setPoemStatus("continue")

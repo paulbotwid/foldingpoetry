@@ -76,6 +76,7 @@ h4 {
 
 p {
   width: 35rem;
+  @apply mb-4;
 }
 
 
@@ -91,6 +92,10 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   @apply rounded-md bg-[var(--bright-green)] hover:bg-white transition;
+}
+
+.text-btn {
+  @apply text-gray-400 hover:text-gray-800;
 }
 
 // inputs 

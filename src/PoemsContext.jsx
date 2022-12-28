@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
-import useLocation from "./hooks/useLocation"
+import useCountry from "./hooks/useCountry"
 import Axios from "axios"
+import { useSearchParams } from "react-router-dom"
 
 const PoemsContext = React.createContext()
 
@@ -12,7 +13,7 @@ function PoemsContextProvider({children}) {
     const [contributions, setContributions] = useState([])
     const [poemsLoaded, setPoemsLoaded] = useState(false)
     const [contributionStatus, setContributionStatus] = useState({status: false, poem: null})
-    const locationData = useLocation()
+    const locationData = useCountry()
 
     // Look for past contributions 
     useEffect(()=>{
@@ -28,12 +29,12 @@ function PoemsContextProvider({children}) {
         localStorage.setItem("contributions", JSON.stringify(contributions))
     }, [contributions])
 
-    // get history from localstorage and get location
+    // get unfinished poems
     useEffect(()=> {
-        console.log("Getting poems")
+        console.log("Getting unfinished poems")
         Axios.get("http://localhost:3000/getUnfinishedPoems").then((response)=>{
             setUnfinishedPoems(response.data)
-            console.log("unfinishedPoems:")
+            console.log("Found unfinished poems:")
             console.log(response.data)
         }).catch(error=>{
             console.log(error)
@@ -76,6 +77,7 @@ function PoemsContextProvider({children}) {
     function deletePoem(id) {
         Axios.delete(`http://localhost:3000/deletePoem/${id}`).then((res)=>{
             console.log("deleted poem succesfully")
+            console.log(res)
         })
     }
 
@@ -85,7 +87,6 @@ function PoemsContextProvider({children}) {
         ))
         setContributionStatus({status: true, poem: poem})
     }
-
 
     return (
         <PoemsContext.Provider value={{

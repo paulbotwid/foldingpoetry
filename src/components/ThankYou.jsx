@@ -24,6 +24,11 @@ export default function ThankYou() {
         })
     }
 
+    function sharePoem() {
+        const url = window.location.href + "?shared=" + contributionStatus.poem.id
+        console.log(url)
+    }
+
     return (
         <section className="thank-you mb-40">
             <h2>Thanks for your contribution</h2>
@@ -34,7 +39,7 @@ export default function ThankYou() {
             !didSubmitEmail && !contributionStatus.poem.isFinished &&
             <>
             <p>If you want us to let you know when the poem is finished (so you can read it), type in your email below.</p>
-            <form action="">
+            <form className="my-8" action="">
                     <input 
                     name="email"
                     type="email" 
@@ -44,6 +49,11 @@ export default function ThankYou() {
                     className="block my-4 w-72"/>
                     <button onClick={submitForm}>Submit</button>
             </form>
+            <hr />
+            <p className="mt-8">
+                Want your friend to take up where you left off?
+            </p>
+            <button onClick={sharePoem}>Share poem</button>
             </>
             }
             {contributionStatus.poem.isFinished && <Poem isSingle={true} poem={contributionStatus.poem} />}
