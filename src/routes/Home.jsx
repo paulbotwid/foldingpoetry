@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import PoetryInputs from "../components/PoetryInputs"
 import ShowPoems from "../components/ShowPoems"
+import SinglePoem from "../components/singlePoem"
 import ThankYou from "../components/ThankYou"
 import getRandomPoem from "../hooks/getRandomPoem"
 import { PoemsContext } from "../PoemsContext"
@@ -8,7 +9,7 @@ import { PoemsContext } from "../PoemsContext"
 export default function Home(){
 
     const {contributionStatus} = useContext(PoemsContext)
-    const randomPoem = getRandomPoem()
+    const {randomPoem, loading} = getRandomPoem()
 
     return (
         <>
@@ -20,7 +21,10 @@ export default function Home(){
             <PoetryInputs />
             <div className="long-arrow-down mb-10 relative w-[1px] left-4 bg-gray-400 text-gray-400 mt-auto h-24"></div>
         </div>
-        {randomPoem}    
+        {
+            !loading && 
+            <SinglePoem loading={loading} poem={randomPoem} />    
+        }
         </>
         }
         </>

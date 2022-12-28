@@ -6,10 +6,11 @@ import Root from './routes/Root'
 import Home from './routes/Home'
 import Archive from './routes/Archive'
 import ErrorPage from './errorPage'
-import Poem from './components/Poem'
+import SinglePoem from './components/SinglePoem'
 import Axios from 'axios'
 
 import './style.scss'
+import RandomPoem from './routes/RandomPoem'
 
 
 const router = createBrowserRouter([
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/poems/:id",
-        element: <Poem isSingle={true} />,
+        element: <SinglePoem />,
         errorElement: <ErrorPage />,
         loader: async ({params}) => {
           return (
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/archive",
         element: <Archive />
+      },
+      {
+        path: "/random",
+        element: <RandomPoem />
       }
     ],
   },

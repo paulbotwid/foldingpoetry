@@ -141,13 +141,28 @@ button {
   cursor: pointer;
 }
 
+.single-poem .poem {
+  position: absolute;
+  &:hover {
+    // color: var(--bright-green);
+  }
+}
+
 .poem-lines {
   transition: all 0.75s;
   cursor: pointer;
   pointer-events: all;
   &:hover {
-    color: blue;
+    color: var(--bright-green);
     transition: all 0.1s;
+  }
+}
+.single-poem.hidden-spacer-poem {
+  position: static;
+  opacity: 0;
+  pointer-events: none;
+  .poem-lines {
+    pointer-events: none;
   }
 }
 .poem-line {
@@ -156,9 +171,11 @@ button {
 .poem-lines:after {
   content: attr(data-location);
   position: absolute;
-  top: 0;
-  right: 0rem;
-  color: #222;
+  top: -1rem;
+  left: 0;
+  color: grey;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 1rem;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s 0.2s;
