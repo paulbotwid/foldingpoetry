@@ -1,8 +1,7 @@
 import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 import PoetryInputs from "../components/PoetryInputs"
-import ShowPoems from "../components/ShowPoems"
 import SinglePoem from "../components/singlePoem"
-import ThankYou from "../components/ThankYou"
 import getRandomPoem from "../hooks/getRandomPoem"
 import { PoemsContext } from "../PoemsContext"
 
@@ -11,11 +10,8 @@ export default function Home(){
     const {contributionStatus} = useContext(PoemsContext)
     const {randomPoem, loading} = getRandomPoem()
 
+
     return (
-        <>
-        { 
-        contributionStatus.status ? 
-        <ThankYou/> : 
         <>
         <div className="start-page relative h-[80vh] flex flex-col justify-between">
             <PoetryInputs />
@@ -24,8 +20,6 @@ export default function Home(){
         {
             !loading && 
             <SinglePoem loading={loading} poem={randomPoem} />    
-        }
-        </>
         }
         </>
     )

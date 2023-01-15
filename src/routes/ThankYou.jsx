@@ -1,7 +1,8 @@
 import Axios from "axios"
 import { useContext, useState } from "react"
 import { PoemsContext } from "../PoemsContext"
-import Poem from "./Poem"
+import Poem from "../components/Poem"
+import { Link } from "react-router-dom"
 
 export default function ThankYou() {
 
@@ -25,15 +26,21 @@ export default function ThankYou() {
     }
 
     function sharePoem() {
-        const url = window.location.href + "?shared=" + contributionStatus.poem.id
-        console.log(url)
+        const url = window.location.protocol + window.location.host + "/?shared=" + contributionStatus.poem.id
+        copyToClipboard(url)
     }
 
     return (
         <section className="thank-you mb-40">
             <h2>Thanks for your contribution</h2>
             {contributionStatus.poem.isFinished && <p>The poem you finished can be found below</p> }
-            {didSubmitEmail && <p className="mt-6">Cool, we'll let you know</p>}
+            {
+            didSubmitEmail && 
+            <>
+            <p className="mt-6">Cool, we'll let you know</p>
+            <Link to="/"><button>Start again</button></Link>
+            </>
+            }
             {
             // did not already submit email, AND poem is not finished
             !didSubmitEmail && !contributionStatus.poem.isFinished &&
@@ -53,11 +60,24 @@ export default function ThankYou() {
             <p className="mt-8">
                 Want your friend to take up where you left off?
             </p>
-            <button onClick={sharePoem}>Share poem</button>
+            <button className="block my-2" onClick={sharePoem}>Copy poem url</button>
+            or
+            <Link to="/"><button className="block my-2 border-black text-black">Go again</button></Link>
             </>
             }
             {contributionStatus.poem.isFinished && <Poem isSingle={true} poem={contributionStatus.poem} />}
 
         </section>
     )
+}
+
+
+function copyToClipboard(text) {
+     // Copy the text inside the text field
+    navigator.clipboard.writeText(text)
+    .then(()=>{
+        console.log("success copy: " + text)
+    }, () =>{
+        console.log("failed copy")
+    })
 }

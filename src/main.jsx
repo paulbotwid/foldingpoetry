@@ -11,6 +11,7 @@ import Axios from 'axios'
 
 import './style.scss'
 import RandomPoem from './routes/RandomPoem'
+import ThankYou from './routes/ThankYou'
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             })
           )
         }
+      },
+      {
+        path: "/thankyou",
+        element: <ThankYou />
       },
       {
         path: "/archive",
