@@ -22,6 +22,8 @@ export default function PoetryInputs() {
     const firstLineRef = useRef()
     const secondLineRef = useRef()
 
+    const maxWords = 3
+
     const [passedPoemQuery, setPassedPoemQuery] = useSearchParams()
 
     const navigate = useNavigate()
@@ -57,6 +59,11 @@ export default function PoetryInputs() {
 
     function handleChange(event) {
         const {name, value} = event.target
+        const wordCount = value.split(" ").length
+        // if(wordCount >= maxWords) { 
+        //     setPoemInputs(prevInputs => ({ ...prevInputs }))
+        //     return
+        // }
         setPoemInputs(prevInputs => ({ ...prevInputs, [name]: value}))
     }
 
@@ -146,7 +153,9 @@ export default function PoetryInputs() {
                     className="poetry-input poetry-input--first-line mr-2 flex-grow"
                     autoComplete="off"
                     />
-                    {poemStatus !== "finish" && <span className="block w-full">
+                    {
+                    poemStatus !== "finish" && 
+                    <span className="block w-full">
                         <input type="text"
                         ref={secondLineRef}
                         name="secondLine"
@@ -155,7 +164,8 @@ export default function PoetryInputs() {
                         className="poetry-input poetry-input--second-line block"
                         autoComplete="off"
                         />
-                    </span>}
+                    </span>
+                    }
                 </div>
                 <button className="mt-8" onClick={submitPoem}>Submit</button>
             </form>

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import SinglePoem from "../components/SinglePoem";
 import getRandomPoem from "../hooks/getRandomPoem";
 

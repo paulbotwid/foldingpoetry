@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import useCountry from "./hooks/useCountry"
 import Axios from "axios"
+import { api } from "./utils/api"
+
 import { useSearchParams } from "react-router-dom"
 
 const PoemsContext = React.createContext()
@@ -32,7 +34,7 @@ function PoemsContextProvider({children}) {
     // get unfinished poems
     useEffect(()=> {
         console.log("Getting unfinished poems")
-        Axios.get("http://localhost:3000/getUnfinishedPoems").then((response)=>{
+        api.get("getUnfinishedPoems").then((response)=>{
             setUnfinishedPoems(response.data)
             console.log("Found unfinished poems:")
             console.log(response.data)
@@ -54,20 +56,20 @@ function PoemsContextProvider({children}) {
 
     function createNewPoem(poemObj) {
         console.log("creating new poem")
-        Axios.post("http://localhost:3000/createPoem", poemObj).then((response)=>{
+        api.post("createPoem", poemObj).then((response)=>{
             console.log("Created new poem on db, id: " + poemObj.id)
         })
         addContribution(poemObj)
     }
 
     function updatePoem(updatedPoem) {
-        Axios.put("http://localhost:3000/updatePoem", updatedPoem).then((response)=>{
+        api.put("updatePoem", updatedPoem).then((response)=>{
             console.log("updated poem succesfully: ")
             console.log(response)
         })
         if(updatedPoem.isFinished) {
-            Axios.get(`http://localhost:3000/api/sendemail/${updatedPoem.id}`).then((response)=>{
-               console.log("Axios: sent emails. Response:")
+            api.get(`api/sendemail/${updatedPoem.id}`).then((response)=>{
+               console.log("api: sent emails. Response:")
                console.log(response)
             })
         }
@@ -75,7 +77,7 @@ function PoemsContextProvider({children}) {
     }
 
     function deletePoem(id) {
-        Axios.delete(`http://localhost:3000/deletePoem/${id}`).then((res)=>{
+        api.delete(`deletePoem/${id}`).then((res)=>{
             console.log("deleted poem succesfully")
             console.log(res)
         })

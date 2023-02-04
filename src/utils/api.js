@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const api = axios.create({
-    baseURL: "http://localhost:3000/"
-})
+
+const baseUrl = import.meta.env.PROD ? {baseURL: "https://foldingpoetry.com/"} : {baseURL: "http://localhost:3000/"}
+const api = axios.create(baseUrl)
 
 function getRandom() {
     return api.get("getRandomFinishedPoem").then((response)=>{

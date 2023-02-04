@@ -139,22 +139,28 @@ button {
   width: 40rem;
   max-width: 100%;
   color: #222;
+  transition: color 1s;
   position: relative;
   cursor: pointer;
 }
 .poem:hover {
-  color: #222;
+  transition: color 0.2s;
+  color: blue;
 }
 
 .single-poem .poem {
   position: absolute;
 }
-.poem-lines {
+.single-poem .poem:hover {
+  color: #222;
+}
+
+.single-poem .poem-lines {
   transition: all 0.75s;
   cursor: pointer;
   pointer-events: all;
 }
-.poem-lines:hover {
+.single-poem .poem-lines:hover {
   color: var(--bright-green);
   transition: all 0.1s;
 }
@@ -172,7 +178,7 @@ button {
   display: inline-block;
 }
 
-.poem-lines:after {
+.single-poem .poem-lines:after {
   content: attr(data-location);
   position: absolute;
   top: -1rem;
@@ -189,7 +195,7 @@ button {
   opacity: 1;
 }
 
-.poem:hover .poem-lines:not(:hover) {
+.single-poem .poem:hover .poem-lines:not(:hover) {
   opacity: 0.5;
 }
 

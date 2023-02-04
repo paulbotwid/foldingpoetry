@@ -8,6 +8,7 @@ import Archive from './routes/Archive'
 import ErrorPage from './errorPage'
 import SinglePoem from './components/SinglePoem'
 import Axios from 'axios'
+import { api } from './utils/api'
 
 import './style.scss'
 import RandomPoem from './routes/RandomPoem'
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         loader: async ({params}) => {
           return (
-            Axios.get(`http://localhost:3000/getSingle/${params.id}`).then((response)=>{
+            api.get(`getSingle/${params.id}`).then((response)=>{
                 return response.data
             })
           )

@@ -15,12 +15,12 @@ export default function Home(){
         <>
         <div className="start-page relative h-[80vh] flex flex-col justify-between">
             <PoetryInputs />
-            <div className="long-arrow-down mb-10 relative w-[1px] left-4 bg-gray-400 text-gray-400 mt-auto h-24"></div>
+            {/* <div className="long-arrow-down mb-10 relative w-[1px] left-4 bg-gray-400 text-gray-400 mt-auto h-24"></div> */}
         </div>
-        {
+        {/* {
             !loading && 
             <SinglePoem loading={loading} poem={randomPoem} />    
-        }
+        } */}
         </>
     )
 }

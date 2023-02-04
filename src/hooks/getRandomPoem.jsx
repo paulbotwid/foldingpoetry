@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import Axios from "axios"
+import { api } from "../utils/api"
 
 export default function getRandomPoem() {
 
@@ -7,7 +7,7 @@ export default function getRandomPoem() {
     const [loading, setLoading] = useState(true)
 
     useEffect(()=>{
-        Axios.get("http://localhost:3000/getRandomFinishedPoem").then((response)=>{
+        api.get("getRandomFinishedPoem").then((response)=>{
             setRandomPoem(response.data)
         }).catch(error=>{
             console.log(error)
